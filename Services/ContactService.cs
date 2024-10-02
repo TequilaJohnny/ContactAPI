@@ -1,4 +1,5 @@
 using contactApi.Models;
+using contactApi.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace contactApi.Services
@@ -44,6 +45,22 @@ namespace contactApi.Services
                 _context.Contacts.Remove(contact);
                 await _context.SaveChangesAsync();
             }
+        }
+
+
+        public async Task<PaginatedContactsResponse> GetPaginatedContacts(int pageNumber, int pageSize)
+        {
+            var totalCount = await _context.Contacts.CountAsync();
+            var contacts = await _context.Contacts
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedContactsResponse
+            {
+                Contacts = contacts,
+                TotalCount = totalCount
+            };
         }
     }
 }

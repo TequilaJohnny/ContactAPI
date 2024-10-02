@@ -22,6 +22,13 @@ namespace contactApi.Controllers
             return Ok(contacts);
         }
 
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginatedContacts(int pageNumber = 1, int pageSize = 10)
+        {
+            var paginatedContacts = await _contactService.GetPaginatedContacts(pageNumber, pageSize);
+            return Ok(paginatedContacts);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetContactById(int id)
         {
